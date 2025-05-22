@@ -1,0 +1,73 @@
+.container{
+    margin: 0 15px;
+}
+
+.form-box{
+    border-radius: 10px;
+    display: none;
+}
+
+
+.form-box.active{
+    display: block;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fdfcfb;
+    color: #2e2e2e;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+.form-box {
+    border-radius: 10px;
+    background-color: white; /* Add background color */
+    border: 1px solid #ddd; /* Add border */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Add shadow */
+    padding: 20px; /* Add padding */
+    margin-bottom: 20px; /* Add margin for spacing */
+}
+
+.form-box h2 {
+    font-size: 24px; /* Match section title font size */
+    color: #333; /* Match section title color */
+    margin-bottom: 20px; /* Add margin for spacing */
+}
+
+.form-box input {
+    width: 100%; /* Full width inputs */
+    padding: 10px; /* Add padding */
+    margin: 10px 0; /* Add margin for spacing */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.form-box button {
+    background-color: #2C3E50; /* Match navbar background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    padding: 10px; /* Add padding */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    width: 100%; /* Full width button */
+}
+
+.form-box button:hover {
+    background-color: #34495E; /* Darker shade on hover */
+}
+
+.error-message {
+    color: red; /* Error message color */
+    margin-bottom: 10px; /* Add margin for spacing */
+}
+
+.form-box p {
+    margin-top: 15px; /* Add margin for spacing */
+}
