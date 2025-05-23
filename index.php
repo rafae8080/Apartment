@@ -45,7 +45,7 @@ if (!isset($_SESSION['userEmail'])) {
         </div>
         <div class="nav-links">
             <a href="#apartments">Apartments</a>
-            <a href="form.php">Lease</a>
+            <a href="lease.php">Lease</a>
             <a href="#transactions">Transactions</a>
         </div>
     </nav>
