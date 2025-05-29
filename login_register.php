@@ -6,6 +6,7 @@ if (isset($_POST['register'])) {
     $userName = $_POST['userName'];
     $userEmail = $_POST['userEmail'];
     $userPassword = password_hash($_POST['userPassword'], PASSWORD_DEFAULT);
+    $userRole = $_POST['userRole'];
 
     // Use sqlsrv_query() instead of $conn->query()
     $checkEmailQuery = "SELECT userEmail FROM users WHERE userEmail = ?";
@@ -22,14 +23,15 @@ if (isset($_POST['register'])) {
         header("Location: login.php");
         exit();
     } else {
-        $insertQuery = "INSERT INTO users (userName, userEmail, userPassword) VALUES (?, ?, ?)";
-        $params = array($userName, $userEmail, $userPassword);
+        $insertQuery = "INSERT INTO users (userName, userEmail, userPassword, userRole) VALUES (?, ?, ?, ?)";
+        $params = array($userName, $userEmail, $userPassword,$userRole);
         $stmt = sqlsrv_query($conn, $insertQuery, $params);
 
         if ($stmt === false) {
             die(print_r(sqlsrv_errors(), true));
         }
-
+        $_SESSION['register_success']=' Account Registered Successfully!';
+        $_SESSION['active_form']='login';
         header("Location: login.php");
         exit();
     }
@@ -52,6 +54,7 @@ if (isset($_POST['login'])) {
         if (password_verify($userPassword, $user['userPassword'])) {
             $_SESSION['userName'] = $user['userName'];
             $_SESSION['userEmail'] = $user['userEmail'];
+            $_SESSION['userRole'] = $user['userRole'];
             header("Location: index.php");
             exit();
         }

@@ -7,7 +7,6 @@ $connectionOptions = [
 ];
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 if ($conn === false) die(print_r(sqlsrv_errors(), true));
-
 require_once 'session_init.php';
 if (!isset($_SESSION['userEmail'])) {
     header("Location: login.php");
@@ -157,6 +156,8 @@ $stmt = sqlsrv_query($conn, $sql);
         }
     </style>
 </head>
+
+
 <body>
     <nav class="navbar">
         <div class="logo"><a href="index.php">RM</a></div>
@@ -180,22 +181,29 @@ $stmt = sqlsrv_query($conn, $sql);
                             <p><?= htmlspecialchars($row['address']) ?></p>
                         </div>
                     </a>
+                    
+                    <?php if($_SESSION['userRole'] === 'admin') : ?>
                     <!-- Edit and Delete buttons -->
                     <button onclick="openEditModal(<?= $row['id'] ?>, '<?= addslashes($row['name']) ?>', '<?= addslashes($row['address']) ?>')">Edit</button>
                     <form method="POST" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this apartment?');">
                         <input type="hidden" name="delete_id" value="<?= $row['id'] ?>" />
                         <button type="submit">Delete</button>
                     </form>
+                    <?php endif; ?>
+
                 </div>
             <?php } ?>
-
+ 
+            <?php if($_SESSION['userRole'] === 'admin') : ?>
             <!-- Add Apartment Button -->
             <div class="apartment-card add-card" onclick="document.getElementById('addModal').style.display='flex'">
                 + Add Apartment
             </div>
-        </div>
+            <?php endif; ?>
+       </div>
     </div>
 
+    <?php if($_SESSION['userRole'] === 'admin') : ?>
     <!-- Modal for adding new apartment -->
     <div id="addModal" class="modal">
         <div class="modal-content">
@@ -223,6 +231,30 @@ $stmt = sqlsrv_query($conn, $sql);
             </form>
         </div>
     </div>
+    <?php endif; ?>
+
+    <!-- FOR LOGOUT -->
+    <div class="user-section">
+                <span class ="user-name"> <?php echo htmlspecialchars($_SESSION['userName']); ?> </span>
+                <span class ="user-role"> <?php echo htmlspecialchars($_SESSION['userRole']); ?> </span>
+                <span class ="user-email"> <?php echo htmlspecialchars($_SESSION['userEmail']); ?> </span>
+                <form action = "logout.php" method="post">
+                    <button type="submit" class="logout-btn">Logout</button> </form>
+            </div>      
+            <style>
+.user-section {
+    position :fixed;
+    bottom: 20px;
+    right :20px;
+    border:1px solid black
+  }
+  .user-section .user-email,.user-name{
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    word-wrap: break-word;
+  }
+                </style>
 
     <script>
         function openEditModal(id, name, address) {

@@ -22,79 +22,7 @@ $apartments = ['Burgos', 'Lazaro', 'Cupang', 'Sylvestre', 'San Luis'];
     <title>Lease Overview</title>
     <link rel="stylesheet" href="css/lease.css">
     <link rel="stylesheet" href="css/payment.css">
-    <style>
-        .tab-content { display: none; margin-top: 1em; }
-        .tab-content.active { display: block; }
-        .tenant-card {
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-        }
-        .add-payment-btn {
-            margin-top: 10px;
-            padding: 5px 10px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .add-payment-btn:hover {
-            background: #0056b3;
-        }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 10;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            right: 10px; top: 10px;
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        .modal-content label {
-            display: block;
-            margin-top: 10px;
-        }
-
-        .modal-content input,
-        .modal-content select {
-            width: 100%;
-            padding: 5px;
-            margin-top: 5px;
-        }
-
-        .modal-content button {
-            margin-top: 15px;
-            width: 100%;
-            padding: 8px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-        }
-    </style>
 </head>
 <body>
     <h2>Lease Overview</h2>

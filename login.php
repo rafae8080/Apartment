@@ -3,15 +3,20 @@ require_once 'session_init.php';
 
 $errors= [
     'login' =>$_SESSION['login_error'] ?? '',
-    'register'=>$_SESSION['register_error'] ?? ''
+    'register'=>$_SESSION['register_error'] ?? '',
+    'register_success'=>$_SESSION['register_success'] ?? ''
 ];
 
 $activeForm=$_SESSION['active_form'] ?? 'login';
 
 session_unset();
 
-function showError($error){
-    return !empty($error) ? "<p class='error-message'>$error</p>" :'';
+function showError($error, $isSuccess = false) {
+    if (!empty($error)) {
+        $class = $isSuccess ? 'success-message' : 'error-message';
+        return "<p class='$class'>$error</p>";
+    }
+    return '';
 }
 
 function isActiveForm($formName,$activeForm){
@@ -38,6 +43,7 @@ function isActiveForm($formName,$activeForm){
         <form action="login_register.php" method ="post">
             <h2>Login</h2>
             <?=showError($errors['login']); ?>
+            <?=showError($errors['register_success'], true); ?>
             <input type ="email" name="userEmail" placeholder="Email" required>
             <input type ="password" name="userPassword" placeholder="Password" required>
             <button type ="submit" name="login">Login</button>
@@ -53,6 +59,11 @@ function isActiveForm($formName,$activeForm){
             <input type ="text" name="userName" placeholder="Name" required>
             <input type ="email" name="userEmail" placeholder="Email" required>
             <input type ="password" name="userPassword" placeholder="Password" required>
+            <select name ="userRole" required>
+                <option value ="">--Select Role--</option>
+                <option value ="admin">Admin</option>
+                <option value ="landlord">Landlord</option>
+            </select>
             <button type ="submit" name="register"> Register</button>
 
             <p> Already have an account? <a href="#" onclick="showForm('login-form')"> Login </a></p>

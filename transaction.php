@@ -18,7 +18,7 @@ $unit = $_GET['unit'] ?? '';
 $tenant = $_GET['tenant'] ?? '';
 $payment_date = $_GET['payment_date'] ?? '';
 
-$sql = "SELECT apartment, unit, tenant, payment_date, amount, payment_method FROM transactions WHERE 1=1";
+$sql = "SELECT transaction_id, apartment, unit, tenant, payment_date, amount, payment_method FROM transactions WHERE 1=1";
 $params = [];
 
 if (!empty($apartment)) {
@@ -75,27 +75,31 @@ sqlsrv_execute($stmt);
 <table>
     <thead>
         <tr>
-            <th>Apartment</th>
-            <th>Unit</th>
-            <th>Tenant</th>
-            <th>Date of Payment</th>
-            <th>Amount</th>
-            <th>Payment Method</th>
+<th>Transaction ID</th>
+<th>Apartment</th>
+<th>Unit</th>
+<th>Tenant</th>
+<th>Date of Payment</th>
+<th>Amount</th>
+<th>Payment Method</th>
+
         </tr>
     </thead>
     <tbody>
     <?php
-    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-        $date = $row['payment_date'] ? $row['payment_date']->format('Y-m-d') : '';
-        echo "<tr>
-                <td>" . htmlspecialchars($row['apartment']) . "</td>
-                <td>" . htmlspecialchars($row['unit']) . "</td>
-                <td>" . htmlspecialchars($row['tenant']) . "</td>
-                <td>" . $date . "</td>
-                <td>" . htmlspecialchars($row['amount']) . "</td>
-                <td>" . htmlspecialchars($row['payment_method']) . "</td>
-              </tr>";
-    }
+while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    $date = $row['payment_date'] ? $row['payment_date']->format('Y-m-d') : '';
+    echo "<tr>
+<td>" . substr(htmlspecialchars($row['transaction_id']), 0, 8) . "...</td>
+            <td>" . htmlspecialchars($row['apartment']) . "</td>
+            <td>" . htmlspecialchars($row['unit']) . "</td>
+            <td>" . htmlspecialchars($row['tenant']) . "</td>
+            <td>" . $date . "</td>
+            <td>" . htmlspecialchars($row['amount']) . "</td>
+            <td>" . htmlspecialchars($row['payment_method']) . "</td>
+          </tr>";
+}
+
     ?>
     </tbody>
 </table>
