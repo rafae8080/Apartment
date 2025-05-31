@@ -1,7 +1,7 @@
 <?php
 // lease.php
 
-$serverName = "LAPTOP-0QN98R6Q";
+$serverName = "DESKTOP-F68QS4T";
 $connectionOptions = [
     "Database" => "LeaseManagementDB",
     "Uid" => "",
@@ -12,8 +12,22 @@ if ($conn === false) {
     die("Connection failed: " . print_r(sqlsrv_errors(), true));
 }
 
-$apartments = ['Burgos', 'Lazaro', 'Cupang', 'Sylvestre', 'San Luis'];
+$apartments = array();
+
+// Correct SQLSRV query for fetching apartments
+$sql = "SELECT name FROM Apartments ORDER BY id ASC";
+$stmt = sqlsrv_query($conn, $sql);
+
+if ($stmt === false) {
+    die("Error fetching apartments: " . print_r(sqlsrv_errors(), true));
+}
+
+while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+    $apartments[] = $row['name'];
+}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
