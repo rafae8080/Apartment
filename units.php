@@ -168,12 +168,17 @@ $unitsStmt = sqlsrv_query($conn, $unitsSql, [$apartmentId]);
                                 <input type="hidden" name="apartment_id" value="<?= $apartmentId ?>">
                                 <button class="btn delete" type="submit">Delete</button>
                             </form>
-<button class="btn" onclick="openLeaseModal('<?= htmlspecialchars($apartmentName) ?>', '<?= htmlspecialchars($unit['name']) ?>', '<?= htmlspecialchars($unit['details']) ?>', '<?= htmlspecialchars($unit['rate']) ?>')" <?= $isTaken ? 'disabled title="This unit is already leased."' : '' ?>>Create Lease</button>
-                        </div>
-<?php else: ?>
-    <button class="btn" onclick="openLeaseModal('<?= htmlspecialchars($apartmentName) ?>', '<?= htmlspecialchars($unit['name']) ?>', '<?= htmlspecialchars($unit['details']) ?>', '<?= htmlspecialchars($unit['rate']) ?>')" <?= $isTaken ? 'disabled title="This unit is already leased."' : '' ?>>Create Lease</button>
-<?php endif; ?>
-
+<button 
+    class="btn lease-btn" 
+    onclick="<?= $isTaken ? "alert('This unit is already taken.')" : "openLeaseModal('".htmlspecialchars($apartmentName)."', '".htmlspecialchars($unit['name'])."', '".htmlspecialchars($unit['details'])."', '".htmlspecialchars($unit['rate'])."')" ?>">
+    Create Lease
+</button>                        </div>
+                        <?php else: ?>
+<button 
+    class="btn lease-btn" 
+    onclick="<?= $isTaken ? "alert('This unit is already taken.')" : "openLeaseModal('".htmlspecialchars($apartmentName)."', '".htmlspecialchars($unit['name'])."', '".htmlspecialchars($unit['details'])."', '".htmlspecialchars($unit['rate'])."')" ?>">
+    Create Lease
+</button>                        <?php endif; ?>
                     </div>
                 </div>
             <?php } ?>

@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apartment_name'])) {
 // Delete logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $deleteId = $_POST['delete_id'];
-    $deleteSql = "DELETE FROM Apartments WHERE id = ?";
+    $deleteSql = "UPDATE Apartments SET is_active = 0 WHERE id = ?";
     $deleteStmt = sqlsrv_prepare($conn, $deleteSql, [$deleteId]);
     if (sqlsrv_execute($deleteStmt)) {
         header("Location: index.php");
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'])) {
 }
 
 // Fetch updated apartment list
-$sql = "SELECT id, name, address, page_link, image_path FROM Apartments";
+$sql = "SELECT id, name, address, page_link, image_path FROM Apartments WHERE is_active = 1";
 $stmt = sqlsrv_query($conn, $sql);
 ?>
 
@@ -190,6 +190,7 @@ $stmt = sqlsrv_query($conn, $sql);
     color: inherit;
 }
 
+    
     </style>
 </head>
 
