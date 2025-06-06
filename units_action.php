@@ -10,7 +10,6 @@ if ($conn === false) {
     die(print_r(sqlsrv_errors(), true));
 }
 
-// Check if 'action' and 'apartment_id' are set
 if (!isset($_POST['action'], $_POST['apartment_id'])) {
     showResponse("Error", "Invalid request.");
     exit;
@@ -19,7 +18,6 @@ if (!isset($_POST['action'], $_POST['apartment_id'])) {
 $action = $_POST['action'];
 $apartmentId = $_POST['apartment_id'];
 
-// Get apartment name for display
 $stmt = sqlsrv_query($conn, "SELECT name FROM Apartments WHERE id = ?", [$apartmentId]);
 if (!$stmt) {
     showResponse("Error", print_r(sqlsrv_errors(), true));
@@ -32,7 +30,32 @@ if (!$apartment) {
 }
 $apartmentName = $apartment['name'];
 
-// Function to display the styled response page
+switch ($action) {
+    case 'delete':
+        if (!isset($_POST['unit_id'])) {
+            showResponse("Error", "Missing unit ID.");
+            exit;
+        }
+
+        $unitId = $_POST['unit_id'];
+
+        $deleteSql = "UPDATE Units SET is_active = 0 WHERE id = ?";
+        $deleteStmt = sqlsrv_query($conn, $deleteSql, [$unitId]);
+
+        if ($deleteStmt) {
+            showResponse("success", "Unit successfully removed.");
+        } else {
+            showResponse("error", "Failed to remove unit.");
+        }
+        break;
+
+    // other actions (add/edit) would go here...
+
+    default:
+        showResponse("Error", "Invalid action.");
+        break;
+}
+
 function showResponse($status, $message) {
     $color = $status === "success" ? "#28a745" : "#dc3545";
     echo <<<HTML
@@ -79,7 +102,6 @@ function showResponse($status, $message) {
             cursor: pointer;
             background-color: $color;
             color: white;
-            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
@@ -96,86 +118,16 @@ function showResponse($status, $message) {
             <a href="logout.php">Logout</a>
         </div>
     </nav>
-
     <div class="container">
         <h2>Unit Action Result</h2>
         <p><strong>Status:</strong> $status</p>
         <p>$message</p>
-        <p class="note">Apartment: {$GLOBALS['apartmentName']}</p>
-        <button onclick="window.location.href='units.php?apartment=' + encodeURIComponent('{$GLOBALS['apartmentName']}')">Go Back to Units</button>
+        <form action="units.php" method="get">
+            <input type="hidden" name="apartment" value="{$GLOBALS['apartmentName']}">
+            <button type="submit">Back to Units</button>
+        </form>
     </div>
 </body>
 </html>
 HTML;
-    exit;
 }
-
-if ($action === "add" || $action === "edit") {
-    if (!isset($_POST['name'], $_POST['details'], $_POST['rate'])) {
-        showResponse("Error", "Missing required fields.");
-    }
-
-    $name = $_POST['name'];
-    $details = $_POST['details'];
-    $rate = floatval($_POST['rate']);
-    $unitId = $_POST['unit_id'] ?? null;
-
-    // Handle image upload
-    $imagePath = '';
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-        $allowedExt = ['jpg','jpeg','png','gif'];
-        if (!in_array($ext, $allowedExt)) {
-            showResponse("Error", "Invalid image format. Allowed: jpg, jpeg, png, gif.");
-        }
-        $targetDir = "uploads/";
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
-        $target = $targetDir . uniqid("unit_") . "." . $ext;
-        if (!move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
-            showResponse("Error", "Failed to upload image.");
-        }
-        $imagePath = $target;
-    }
-
-    if ($action === "add") {
-        $sql = "INSERT INTO Units (name, details, rate, image_path, apartment_id) VALUES (?, ?, ?, ?, ?)";
-        $params = [$name, $details, $rate, $imagePath, $apartmentId];
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        if ($stmt) showResponse("Success", "Unit added successfully.");
-        else showResponse("Error", "Failed to add unit.");
-    }
-
-    if ($action === "edit") {
-        if (empty($unitId)) {
-            showResponse("Error", "Invalid unit ID.");
-        }
-        // Keep old image if no new image uploaded
-        if (!$imagePath) {
-            $stmt = sqlsrv_query($conn, "SELECT image_path FROM Units WHERE id = ?", [$unitId]);
-            if (!$stmt) {
-                showResponse("Error", "Failed to fetch current image.");
-            }
-            $old = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-            $imagePath = $old['image_path'];
-        }
-        $sql = "UPDATE Units SET name = ?, details = ?, rate = ?, image_path = ? WHERE id = ?";
-        $params = [$name, $details, $rate, $imagePath, $unitId];
-        $stmt = sqlsrv_query($conn, $sql, $params);
-        if ($stmt) showResponse("Success", "Unit updated successfully.");
-        else showResponse("Error", "Failed to update unit.");
-    }
-}
-
-if ($action === "delete") {
-    $unitId = $_POST['unit_id'] ?? null;
-    if (empty($unitId)) {
-        showResponse("Error", "Invalid unit ID.");
-    }
-    $sql = "DELETE FROM Units WHERE id = ?";
-    $stmt = sqlsrv_query($conn, $sql, [$unitId]);
-    if ($stmt) showResponse("Success", "Unit deleted.");
-    else showResponse("Error", "Failed to delete unit.");
-}
-?>

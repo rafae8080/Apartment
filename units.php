@@ -1,4 +1,4 @@
-<?php 
+<?php  
 session_start();
 
 $serverName = "LAPTOP-0QN98R6Q";
@@ -12,7 +12,6 @@ if ($conn === false) {
     die(print_r(sqlsrv_errors(), true));
 }
 
-// Get apartment
 $apartmentName = $_GET['apartment'] ?? '';
 if (!$apartmentName) die("No apartment specified.");
 
@@ -22,7 +21,6 @@ $apartment = sqlsrv_fetch_array($apartmentStmt, SQLSRV_FETCH_ASSOC);
 if (!$apartment) die("Apartment not found.");
 $apartmentId = $apartment['id'];
 
-// Get units and lease status
 $unitsSql = "
     SELECT u.*, 
            CASE 
@@ -36,10 +34,11 @@ $unitsSql = "
                ELSE 'Available'
            END AS lease_status
     FROM Units u
-    WHERE u.apartment_id = ?";
+    WHERE u.apartment_id = ? AND u.is_active = 1";
 
 $unitsStmt = sqlsrv_query($conn, $unitsSql, [$apartmentId]);
 ?>
+
 
 
 <!DOCTYPE html>
