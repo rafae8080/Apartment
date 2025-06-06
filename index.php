@@ -30,8 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apartment_name'])) {
     $insertSql = "INSERT INTO Apartments (name, address, page_link, image_path) VALUES (?, ?, ?, ?)";
     $insertStmt = sqlsrv_prepare($conn, $insertSql, [$name, $address, $pageLink, $imagePath]);
     if (sqlsrv_execute($insertStmt)) {
-        // Redirect to avoid duplicate submission on refresh
-header("Location: index.php");
+        header("Location: index.php");
         exit();
     } else {
         die(print_r(sqlsrv_errors(), true));
@@ -65,12 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'])) {
         move_uploaded_file($_FILES['edit_image']['tmp_name'], $imagePath);
     }
 
+    $pageLink = "units.php?apartment=" . urlencode($name);
+
     if ($imagePath !== null) {
-        $updateSql = "UPDATE Apartments SET name = ?, address = ?, image_path = ? WHERE id = ?";
-        $params = [$name, $address, $imagePath, $editId];
+        $updateSql = "UPDATE Apartments SET name = ?, address = ?, image_path = ?, page_link = ? WHERE id = ?";
+        $params = [$name, $address, $imagePath, $pageLink, $editId];
     } else {
-        $updateSql = "UPDATE Apartments SET name = ?, address = ? WHERE id = ?";
-        $params = [$name, $address, $editId];
+        $updateSql = "UPDATE Apartments SET name = ?, address = ?, page_link = ? WHERE id = ?";
+        $params = [$name, $address, $pageLink, $editId];
     }
 
     $updateStmt = sqlsrv_prepare($conn, $updateSql, $params);
@@ -128,16 +129,18 @@ $stmt = sqlsrv_query($conn, $sql);
             padding: 8px;
         }
         .modal input[type="submit"], button {
-            background-color: #4CAF50;
+            background-color: #2C3E50;
             color: white;
             border: none;
             padding: 8px 12px;
             cursor: pointer;
             border-radius: 4px;
             margin-right: 5px;
+                        width: 100%;
+
         }
         .modal input[type="submit"]:hover, button:hover {
-            background-color: #45a049;
+            background-color: #2C3E50;
         }
         .apartment-card {
             position: relative;
@@ -154,9 +157,41 @@ $stmt = sqlsrv_query($conn, $sql);
         .apartment-card form {
             display: inline-block;
         }
+        .user-section {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border: 1px solid black;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+        }
+        .user-section .user-email, .user-name {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            word-wrap: break-word;
+        }
+        .logout-btn {
+            background-color: #2C3E50;
+            border: none;
+            padding: 8px 12px;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            width: 100%;
+        }
+        .logout-btn:hover {
+            background-color: #1a2531;
+        }
+        a {
+    text-decoration: none;
+    color: inherit;
+}
+
     </style>
 </head>
-
 
 <body>
     <nav class="navbar">
@@ -235,26 +270,13 @@ $stmt = sqlsrv_query($conn, $sql);
 
     <!-- FOR LOGOUT -->
     <div class="user-section">
-                <span class ="user-name"> <?php echo htmlspecialchars($_SESSION['userName']); ?> </span>
-                <span class ="user-role"> <?php echo htmlspecialchars($_SESSION['userRole']); ?> </span>
-                <span class ="user-email"> <?php echo htmlspecialchars($_SESSION['userEmail']); ?> </span>
-                <form action = "logout.php" method="post">
-                    <button type="submit" class="logout-btn">Logout</button> </form>
-            </div>      
-            <style>
-.user-section {
-    position :fixed;
-    bottom: 20px;
-    right :20px;
-    border:1px solid black
-  }
-  .user-section .user-email,.user-name{
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-    word-wrap: break-word;
-  }
-                </style>
+        <span class="user-name"><?= htmlspecialchars($_SESSION['userName']); ?></span>
+        <span class="user-role"><?= htmlspecialchars($_SESSION['userRole']); ?></span>
+        <span class="user-email"><?= htmlspecialchars($_SESSION['userEmail']); ?></span>
+        <form action="logout.php" method="post">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
 
     <script>
         function openEditModal(id, name, address) {

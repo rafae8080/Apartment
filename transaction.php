@@ -39,70 +39,74 @@ if (!empty($payment_date)) {
 }
 
 $stmt = sqlsrv_prepare($conn, $sql, $params);
+if (!$stmt) {
+    die("SQL prepare failed: " . print_r(sqlsrv_errors(), true));
+}
 sqlsrv_execute($stmt);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Transaction History</title>
-    <style>
-        body { font-family: Arial; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        form input, form select {
-            margin-right: 10px; padding: 6px;
-        }
-        .filter-form {
-            margin-bottom: 15px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/transaction.css" />
 </head>
 <body>
+    <nav class="navbar">
+        <div class="logo"><a href="index.php">RM</a></div>
+        <div class="nav-links">
+            <a href="index.php">Apartments</a>
+            <a href="lease.php">Lease</a>
+            <a href="transaction.php" class="active">Transactions</a>
+            <a href="logout.php">Logout</a>
 
-<h2>Transaction History</h2>
+        </div>
+    </nav>
 
-<form method="get" class="filter-form">
-    <input type="text" name="apartment" placeholder="Apartment" value="<?= htmlspecialchars($apartment) ?>">
-    <input type="text" name="unit" placeholder="Unit" value="<?= htmlspecialchars($unit) ?>">
-    <input type="text" name="tenant" placeholder="Tenant" value="<?= htmlspecialchars($tenant) ?>">
-    <input type="date" name="payment_date" value="<?= htmlspecialchars($payment_date) ?>">
-    <button type="submit">Search</button>
-</form>
+    <div class="container">
+        <h2>Transaction History</h2>
 
-<table>
-    <thead>
-        <tr>
-<th>Transaction ID</th>
-<th>Apartment</th>
-<th>Unit</th>
-<th>Tenant</th>
-<th>Date of Payment</th>
-<th>Amount</th>
-<th>Payment Method</th>
+        <form method="get" class="filter-form" action="transaction.php">
+            <input type="text" name="apartment" placeholder="Apartment" value="<?= htmlspecialchars($apartment) ?>" />
+            <input type="text" name="unit" placeholder="Unit" value="<?= htmlspecialchars($unit) ?>" />
+            <input type="text" name="tenant" placeholder="Tenant" value="<?= htmlspecialchars($tenant) ?>" />
+            <input type="date" name="payment_date" value="<?= htmlspecialchars($payment_date) ?>" />
+            <button type="submit">Search</button>
+        </form>
 
-        </tr>
-    </thead>
-    <tbody>
-    <?php
-while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-    $date = $row['payment_date'] ? $row['payment_date']->format('Y-m-d') : '';
-    echo "<tr>
-<td>" . substr(htmlspecialchars($row['transaction_id']), 0, 8) . "...</td>
-            <td>" . htmlspecialchars($row['apartment']) . "</td>
-            <td>" . htmlspecialchars($row['unit']) . "</td>
-            <td>" . htmlspecialchars($row['tenant']) . "</td>
-            <td>" . $date . "</td>
-            <td>" . htmlspecialchars($row['amount']) . "</td>
-            <td>" . htmlspecialchars($row['payment_method']) . "</td>
-          </tr>";
-}
-
-    ?>
-    </tbody>
-</table>
-
+        <table>
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Apartment</th>
+                    <th>Unit</th>
+                    <th>Tenant</th>
+                    <th>Date of Payment</th>
+                    <th>Amount</th>
+                    <th>Payment Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                    $date = $row['payment_date'] ? $row['payment_date']->format('Y-m-d') : '';
+                    $amountFormatted = 'Php ' . number_format($row['amount'], 2);
+                    echo "<tr>
+                        <td>" . substr(htmlspecialchars($row['transaction_id']), 0, 8) . "...</td>
+                        <td>" . htmlspecialchars($row['apartment']) . "</td>
+                        <td>" . htmlspecialchars($row['unit']) . "</td>
+                        <td>" . htmlspecialchars($row['tenant']) . "</td>
+                        <td>" . $date . "</td>
+                        <td>" . $amountFormatted . "</td>
+                        <td>" . htmlspecialchars($row['payment_method']) . "</td>
+                    </tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

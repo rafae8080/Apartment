@@ -9,6 +9,11 @@ $errors= [
 
 $activeForm=$_SESSION['active_form'] ?? 'login';
 
+$alert = '';
+if ($errors['login'])            { $alert = $errors['login']; }
+elseif ($errors['register'])     { $alert = $errors['register']; }
+elseif ($errors['register_success']) { $alert = $errors['register_success']; }
+
 session_unset();
 
 function showError($error, $isSuccess = false) {
@@ -20,56 +25,58 @@ function showError($error, $isSuccess = false) {
 }
 
 function isActiveForm($formName,$activeForm){
-    return $formName == $activeForm ? 'active' :'';
+    return $formName == $activeForm ? 'active' : '';
 }
-
 ?>
 
-
 <!DOCTYPE html> 
-<html lang = "en">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="css/loginStyle.css">
-
 </head>
 
 <body>
-    <div class ="container">
+    <div class="container">
         <div class="form-box <?= isActiveForm('login',$activeForm); ?>" id="login-form">
-        <form action="login_register.php" method ="post">
-            <h2>Login</h2>
-            <?=showError($errors['login']); ?>
-            <?=showError($errors['register_success'], true); ?>
-            <input type ="email" name="userEmail" placeholder="Email" required>
-            <input type ="password" name="userPassword" placeholder="Password" required>
-            <button type ="submit" name="login">Login</button>
+            <form action="login_register.php" method="post">
+                <h2>Login</h2>
+        
+                <input type="email" name="userEmail" placeholder="Email" required>
+                <input type="password" name="userPassword" placeholder="Password" required>
+                <button type="submit" name="login">Login</button>
 
-            <p> Want to add an account? <a href="#" onclick="showForm('register-form')"> Register </a></p>
-        </form>
+                <p>Want to add an account? <a href="#" onclick="showForm('register-form')">Register</a></p>
+            </form>
         </div>
 
         <div class="form-box <?= isActiveForm('register',$activeForm); ?>" id="register-form">
-        <form action="login_register.php" method ="post">
-            <h2>Register</h2>
-            <?=showError($errors['register']); ?>
-            <input type ="text" name="userName" placeholder="Name" required>
-            <input type ="email" name="userEmail" placeholder="Email" required>
-            <input type ="password" name="userPassword" placeholder="Password" required>
-            <select name ="userRole" required>
-                <option value ="">--Select Role--</option>
-                <option value ="admin">Admin</option>
-                <option value ="landlord">Landlord</option>
-            </select>
-            <button type ="submit" name="register"> Register</button>
+            <form action="login_register.php" method="post">
+                <h2>Register</h2>
+                
+                <input type="text" name="userName" placeholder="Name" required>
+                <input type="email" name="userEmail" placeholder="Email" required>
+                <input type="password" name="userPassword" placeholder="Password" required>
+                <select name="userRole" required>
+                    <option value="">--Select Role--</option>
+                    <option value="admin">Admin</option>
+                    <option value="landlord">Landlord</option>
+                </select>
+                <button type="submit" name="register">Register</button>
 
-            <p> Already have an account? <a href="#" onclick="showForm('login-form')"> Login </a></p>
-        </form>
+                <p>Already have an account? <a href="#" onclick="showForm('login-form')">Login</a></p>
+            </form>
         </div>
     </div>
+    <?php if ($alert): ?>
+<script>
+    /* json_encode safely escapes quotes/new-lines */
+    window.onload = () => alert(<?= json_encode($alert) ?>);
+</script>
+<?php endif; ?>
     <script src="javascript/loginScript.js"></script>
 </body>
 

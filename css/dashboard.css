@@ -1,68 +1,267 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #fdfcfb;
-    color: #2e2e2e;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9fbff;
+    color: #2c3e50;
     margin: 0;
     padding: 0;
 }
 
 .container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 30px 20px;
+    max-width: 1300px;
+    margin: 50px auto;
+    padding: 0 25px;
 }
 
 .section-title {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #182848;
     text-align: left;
-    color: #333;
+    letter-spacing: 0.5px;
 }
 
 /* Apartment Grid */
 .apartment-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
 }
 
 /* Apartment Card */
 .apartment-card {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow:
+        0 8px 16px rgba(24, 40, 72, 0.12),
+        0 4px 8px rgba(24, 40, 72, 0.06);
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease
-    ;
-
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
 }
 
-
 .apartment-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-10px);
+    box-shadow:
+        0 16px 32px rgba(24, 40, 72, 0.2),
+        0 8px 16px rgba(24, 40, 72, 0.12);
 }
 
 .apartment-card img {
     width: 100%;
-    height: 200px;
+    height: 220px;
     object-fit: cover;
-    border-radius: 8px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    transition: transform 0.5s ease;
 }
 
+.apartment-card:hover img {
+    transform: scale(1.05);
+}
 
 .apartment-details {
-    padding: 15px;
+    padding: 24px 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .apartment-details h3 {
-    margin: 0 0 5px 0;
-    font-size: 20px;
-    color: #333;
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
 }
 
 .apartment-details p {
-    margin: 0;
+    margin: 0 0 15px 0;
+    font-size: 15px;
+    color: #5a6d85;
+    line-height: 1.5;
+}
+
+/* Buttons container */
+.btn-group {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+/* Edit button */
+.btn-group .edit-btn {
+    background-color: #1c3e83; /* Gold */
+    box-shadow: 0 4px 8px rgba(241, 196, 15, 0.4);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     font-size: 14px;
-    color: #666;
+    font-family: 'Poppins', sans-serif;
+}
+.btn-group .edit-btn:hover {
+    background-color: #326485;
+}
+
+/* Delete button */
+.btn-group .delete-btn {
+    background-color: #2f3640; /* Slate Gray */
+    box-shadow: 0 4px 8px rgba(47, 54, 64, 0.5);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+}
+.btn-group .delete-btn:hover {
+    background-color: #353b48;
+}
+
+/* Remove default form margin */
+.btn-group form {
+    margin: 0;
+}
+
+/* Add Card */
+.add-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px dashed #4b6cb7;
+    border-radius: 12px;
+    padding: 40px;
+    font-weight: 700;
+    color: #4b6cb7;
+    font-size: 1.4rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+    text-align: center;
+}
+
+.add-card:hover {
+    background-color: #e8f0fe;
+    border-color: #3a53a1;
+    color: #3a53a1;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1100;
+    left: 0; top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(24, 40, 72, 0.7);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px 35px;
+    width: 380px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(24, 40, 72, 0.2);
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #182848;
+    margin-bottom: 25px;
+}
+
+.modal input[type="text"],
+.modal textarea,
+.modal input[type="file"] {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    border: 1.8px solid #d6d9e6;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal input[type="text"]:focus,
+.modal textarea:focus {
+    border-color: #4b6cb7;
+    outline: none;
+}
+
+.modal input[type="submit"],
+button {
+    background-color: #4b6cb7;
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal input[type="submit"]:hover,
+button:hover {
+    background-color: #3a53a1;
+}
+
+/* User Section */
+.user-section {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(24, 40, 72, 0.15);
+    padding: 20px 30px;
+    min-width: 220px;
+    text-align: right;
+    font-weight: 600;
+    color: #182848;
+    font-family: 'Poppins', sans-serif;
+}
+
+.user-section span {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+}
+
+/* Logout button */
+.logout-btn {
+    background-color: #273c75; /* dark steel blue */
+    border: none;
+    padding: 12px 25px;
+    color: white;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 12px;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 6px 14px rgba(39, 60, 117, 0.5);
+}
+
+.logout-btn:hover {
+    background-color: #40739e; /* lighter steel blue */
 }

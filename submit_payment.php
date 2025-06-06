@@ -5,28 +5,32 @@ $connectionOptions = [
     "Uid" => "",
     "PWD" => ""
 ];
+
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 if ($conn === false) {
     die("Connection failed: " . print_r(sqlsrv_errors(), true));
 }
 
-$apartment = $_POST['apartment'] ?? '';
-$unit = $_POST['unit'] ?? '';
-$tenant = $_POST['tenant'] ?? '';
-$payment_date = $_POST['payment_date'] ?? '';
-$amount = $_POST['amount'] ?? '';
-$payment_method = $_POST['payment_method'] ?? '';
+// Get POST data and sanitize
+$apartment = trim($_POST['apartment'] ?? '');
+$unit = trim($_POST['unit'] ?? '');
+$tenant = trim($_POST['tenant'] ?? '');
+$payment_date = trim($_POST['payment_date'] ?? '');
+$amount = trim($_POST['amount'] ?? '');
+$payment_method = trim($_POST['payment_method'] ?? '');
 
+// Basic validation
 if (!$apartment || !$unit || !$tenant || !$payment_date || !$amount || !$payment_method) {
     die("Missing required payment information.");
 }
+
+// Optionally, validate amount and date formats here
 
 if (!sqlsrv_begin_transaction($conn)) {
     die("Transaction start failed: " . print_r(sqlsrv_errors(), true));
 }
 
 try {
-    // Prepare the INSERT with OUTPUT to get the generated transaction_id
     $sql = "
         INSERT INTO transactions (apartment, unit, tenant, payment_date, amount, payment_method)
         OUTPUT INSERTED.transaction_id
@@ -39,18 +43,14 @@ try {
         throw new Exception("Insert failed: " . print_r(sqlsrv_errors(), true));
     }
 
-    // Get the inserted transaction ID
     $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
     $transaction_id = $row['transaction_id'];
 
     sqlsrv_commit($conn);
 
-    // Optionally show confirmation with the transaction ID
-    echo "Payment successful. Transaction ID: " . $transaction_id;
-    header("Location: lease.php");
-    // You can redirect or log as needed
-    // header("Location: lease.php");
-    // exit;
+    // Redirect to lease page with success
+    header("Location: lease.php?payment_success=1&transaction_id=" . $transaction_id);
+    exit();
 
 } catch (Exception $e) {
     sqlsrv_rollback($conn);
