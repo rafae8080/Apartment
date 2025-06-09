@@ -23,6 +23,7 @@ $apartmentId = $apartment['id'];
 
 $unitsSql = "
     SELECT u.*, 
+           l.moveOut,
            CASE 
                WHEN EXISTS (
                    SELECT 1 
@@ -34,6 +35,9 @@ $unitsSql = "
                ELSE 'Available'
            END AS lease_status
     FROM Units u
+    LEFT JOIN Leases l ON l.unit_id = u.id 
+                     AND GETDATE() >= l.moveIn 
+                     AND GETDATE() < DATEADD(DAY, 1, l.moveOut)
     WHERE u.apartment_id = ? AND u.is_active = 1";
 
 $unitsStmt = sqlsrv_query($conn, $unitsSql, [$apartmentId]);
@@ -135,54 +139,59 @@ $unitsStmt = sqlsrv_query($conn, $unitsSql, [$apartmentId]);
     </nav>
 
     <div class="container">
-        <h2><?= htmlspecialchars($apartmentName) ?> Units</h2>
-        
-        <?php if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'admin') : ?>
-        <button class="btn add" onclick="openAddModal()">Add Unit</button>
-        <?php endif; ?>
-        <div class="apartment-grid">
-            <?php while ($unit = sqlsrv_fetch_array($unitsStmt, SQLSRV_FETCH_ASSOC)) {
-    $status = $unit['lease_status'];
-    $isTaken = ($status === 'Taken');
+    <h2><?= htmlspecialchars($apartmentName) ?> Units</h2>
+    
+    <?php if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'admin') : ?>
+    <button class="btn add" onclick="openAddModal()">Add Unit</button>
+    <?php endif; ?>
+    <div class="apartment-grid">
+        <?php while ($unit = sqlsrv_fetch_array($unitsStmt, SQLSRV_FETCH_ASSOC)) : 
+            $status = $unit['lease_status'];
+            $isTaken = ($status === 'Taken');
 
-                $imagePath = !empty($unit['image_path']) && file_exists($unit['image_path']) 
-                    ? htmlspecialchars($unit['image_path']) 
-                    : "https://dummyimage.com/400x300/cccccc/000000&text=No+Image";
-            ?>
-                <div class="apartment-card">
-                    <img src="<?= $imagePath ?>" alt="Unit Image">
-                    <div class="apartment-details">
-                        <h3><?= htmlspecialchars($unit['name']) ?></h3>
-                        <p><?= htmlspecialchars($unit['details']) ?></p>
-                        <p>₱<?= number_format($unit['rate'], 2) ?></p>
-                        <p><strong>Status:</strong> <?= $status ?></p>
+            $imagePath = !empty($unit['image_path']) && file_exists($unit['image_path']) 
+                ? htmlspecialchars($unit['image_path']) 
+                : "https://dummyimage.com/400x300/cccccc/000000&text=No+Image";
+        ?>
+            <div class="apartment-card">
+                <img src="<?= $imagePath ?>" alt="Unit Image">
+                <div class="apartment-details">
+                    <h3><?= htmlspecialchars($unit['name']) ?></h3>
+                    <p><?= htmlspecialchars($unit['details']) ?></p>
+                    <p>₱<?= number_format($unit['rate'], 2) ?></p>
+                    <p><strong>Status:</strong> <?= $status ?>
+                        <?php if ($isTaken && isset($unit['moveOut'])): ?>
+                            <br><span style="color: #e74c3c;">(Taken until <?= $unit['moveOut']->format('M d, Y') ?>)</span>
+                        <?php endif; ?>
+                    </p>
 
-                        <?php if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'admin') : ?>
-                        <div class="btn-group">
-                            <button class="btn edit" onclick='openEditModal(<?= json_encode($unit) ?>)'>Edit</button>
-
-                            <form method="POST" action="units_action.php" onsubmit="return confirm('Delete this unit?');">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="unit_id" value="<?= $unit['id'] ?>">
-                                <input type="hidden" name="apartment_id" value="<?= $apartmentId ?>">
-                                <button class="btn delete" type="submit">Delete</button>
-                            </form>
-<button 
-    class="btn lease-btn" 
-    onclick="<?= $isTaken ? "alert('This unit is already taken.')" : "openLeaseModal('".htmlspecialchars($apartmentName)."', '".htmlspecialchars($unit['name'])."', '".htmlspecialchars($unit['details'])."', '".htmlspecialchars($unit['rate'])."')" ?>">
-    Create Lease
-</button>                        </div>
-                        <?php else: ?>
-<button 
-    class="btn lease-btn" 
-    onclick="<?= $isTaken ? "alert('This unit is already taken.')" : "openLeaseModal('".htmlspecialchars($apartmentName)."', '".htmlspecialchars($unit['name'])."', '".htmlspecialchars($unit['details'])."', '".htmlspecialchars($unit['rate'])."')" ?>">
-    Create Lease
-</button>                        <?php endif; ?>
+                    <?php if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'admin') : ?>
+                    <div class="btn-group">
+                        <button class="btn edit" onclick='openEditModal(<?= json_encode($unit) ?>)'>Edit</button>
+                        <form method="POST" action="units_action.php" onsubmit="return confirm('Delete this unit?');">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="unit_id" value="<?= $unit['id'] ?>">
+                            <input type="hidden" name="apartment_id" value="<?= $apartmentId ?>">
+                            <button class="btn delete" type="submit">Delete</button>
+                        </form>
+                        <button 
+                            class="btn lease-btn" 
+                            onclick="<?= $isTaken ? "alert('This unit is already taken.')" : "openLeaseModal('".htmlspecialchars($apartmentName)."', '".htmlspecialchars($unit['name'])."', '".htmlspecialchars($unit['details'])."', '".htmlspecialchars($unit['rate'])."')" ?>">
+                            Create Lease
+                        </button>
                     </div>
+                    <?php else: ?>
+                    <button 
+                        class="btn lease-btn" 
+                        onclick="<?= $isTaken ? "alert('This unit is already taken.')" : "openLeaseModal('".htmlspecialchars($apartmentName)."', '".htmlspecialchars($unit['name'])."', '".htmlspecialchars($unit['details'])."', '".htmlspecialchars($unit['rate'])."')" ?>">
+                        Create Lease
+                    </button>
+                    <?php endif; ?>
                 </div>
-            <?php } ?>
-        </div>
+            </div>
+        <?php endwhile; ?>
     </div>
+</div>
 
    <!-- Add/Edit Modal -->
 <div id="unitModal" class="modal">

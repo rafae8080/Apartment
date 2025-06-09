@@ -38,7 +38,6 @@ switch ($action) {
         }
 
         $unitId = $_POST['unit_id'];
-
         $deleteSql = "UPDATE Units SET is_active = 0 WHERE id = ?";
         $deleteStmt = sqlsrv_query($conn, $deleteSql, [$unitId]);
 
@@ -49,12 +48,75 @@ switch ($action) {
         }
         break;
 
-    // other actions (add/edit) would go here...
+    case 'add':
+    case 'edit':
+        if (!isset($_POST['name'], $_POST['details'], $_POST['rate'])) {
+            showResponse("Error", "Missing required fields.");
+            exit;
+        }
+
+        $name = $_POST['name'];
+        $details = $_POST['details'];
+        $rate = floatval($_POST['rate']);
+        $unitId = $_POST['unit_id'] ?? null;
+
+        // Handle image upload
+        $imagePath = '';
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowedExt = ['jpg','jpeg','png','gif'];
+            if (!in_array($ext, $allowedExt)) {
+                showResponse("Error", "Invalid image format. Allowed: jpg, jpeg, png, gif.");
+                exit;
+            }
+            $targetDir = "uploads/";
+            if (!is_dir($targetDir)) {
+                mkdir($targetDir, 0755, true);
+            }
+            $target = $targetDir . uniqid("unit_") . "." . $ext;
+            if (!move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
+                showResponse("Error", "Failed to upload image.");
+                exit;
+            }
+            $imagePath = $target;
+        }
+
+        if ($action === "add") {
+            $sql = "INSERT INTO Units (name, details, rate, image_path, apartment_id) VALUES (?, ?, ?, ?, ?)";
+            $params = [$name, $details, $rate, $imagePath, $apartmentId];
+            $stmt = sqlsrv_query($conn, $sql, $params);
+            if ($stmt) showResponse("success", "Unit added successfully.");
+            else showResponse("Error", "Failed to add unit.");
+        }
+
+        if ($action === "edit") {
+            if (empty($unitId)) {
+                showResponse("Error", "Invalid unit ID.");
+                exit;
+            }
+            if (!$imagePath) {
+                $stmt = sqlsrv_query($conn, "SELECT image_path FROM Units WHERE id = ?", [$unitId]);
+                if (!$stmt) {
+                    showResponse("Error", "Failed to fetch current image.");
+                    exit;
+                }
+                $old = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+                $imagePath = $old['image_path'];
+            }
+
+            $sql = "UPDATE Units SET name = ?, details = ?, rate = ?, image_path = ? WHERE id = ?";
+            $params = [$name, $details, $rate, $imagePath, $unitId];
+            $stmt = sqlsrv_query($conn, $sql, $params);
+            if ($stmt) showResponse("success", "Unit updated successfully.");
+            else showResponse("Error", "Failed to update unit.");
+        }
+        break;
 
     default:
         showResponse("Error", "Invalid action.");
         break;
 }
+
 
 function showResponse($status, $message) {
     $color = $status === "success" ? "#28a745" : "#dc3545";
