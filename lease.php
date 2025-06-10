@@ -1,7 +1,7 @@
 <?php
 // lease.php - Fixed version
 
-$serverName = "LAPTOP-0QN98R6Q";
+$serverName = "DESKTOP-F68QS4T";
 $connectionOptions = [
     "Database" => "LeaseManagementDB",
     "Uid" => "",
@@ -98,7 +98,7 @@ if ($leaseStmt === false) {
         <a href="index.php">Apartments</a>
         <a href="lease.php" class="active">Lease</a>
         <a href="transaction.php">Transactions</a>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
     </div>
 </nav>
     <div class="container">
@@ -278,5 +278,48 @@ if (isset($_GET['delete']) && $_GET['delete'] == '1') {
 }
 
 ?>
+<script>
+// Check for payment success on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentSuccess = urlParams.get('payment_success');
+    const transactionId = urlParams.get('transaction_id');
+    
+    if (paymentSuccess === '1') {
+        // Show success message
+        alert(`Payment submitted successfully! Transaction ID: ${transactionId}`);
+        
+        // Close payment modal if it's open
+        if (document.getElementById('payment-modal').style.display === 'flex') {
+            closePaymentModal();
+        }
+        
+        // Remove the success parameters from URL without reloading
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+    }
+});
+// Check for payment success on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentSuccess = urlParams.get('payment_success');
+    const transactionId = urlParams.get('transaction_id');
+    
+    if (paymentSuccess === '1') {
+        // Show success message
+        alert(`Payment submitted successfully! Transaction ID: ${transactionId}`);
+        
+        // Close payment modal if it's open
+        if (document.getElementById('payment-modal').style.display === 'flex') {
+            closePaymentModal();
+        }
+        
+        // Remove the success parameters from URL without reloading
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+    }
+});
+</script>
+
 </body>
 </html>

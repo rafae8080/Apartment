@@ -121,7 +121,7 @@ body::before {
             <a href="index.php">Apartments</a>
             <a href="lease.php">Lease</a>
             <a href="transactions.php">Transactions</a>
-                        <a href="logout.php">Logout</a>
+            <a href="logout.php" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
 
         </div>
     </nav>

@@ -1,7 +1,7 @@
 <?php  
 session_start();
 
-$serverName = "LAPTOP-0QN98R6Q";
+$serverName = "DESKTOP-F68QS4T";
 $connectionOptions = [
     "Database" => "LeaseManagementDB",
     "Uid" => "",
@@ -258,7 +258,7 @@ html, body {
             <a href="index.php">Apartments</a>
             <a href="lease.php">Lease</a>
             <a href="transaction.php">Transactions</a>
-            <a href="logout.php">Logout</a>
+            <a href="logout.php" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
         </div>
     </nav>
 

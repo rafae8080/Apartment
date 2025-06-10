@@ -1,5 +1,5 @@
 <?php
-$serverName = "LAPTOP-0QN98R6Q";
+$serverName = "DESKTOP-F68QS4T";
 $connectionOptions = [
     "Database" => "LeaseManagementDB",
     "Uid" => "",
