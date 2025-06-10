@@ -1,9 +1,10 @@
-body {
-    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9fbff;
-    color: #2c3e50;
+html, body {
     margin: 0;
     padding: 0;
+    background-color: #f0f4ff;
+    font-family: 'Poppins', sans-serif;
+    color: #2c3e50;
+    box-sizing: border-box;
 }
 
 .container {
@@ -30,16 +31,12 @@ h2 {
 
 /* Apartment Card */
 .apartment-card {
-    background-color: #fff;
+    background: #ffffff;
     border-radius: 16px;
-    box-shadow:
-        0 8px 16px rgba(24, 40, 72, 0.12),
-        0 4px 8px rgba(24, 40, 72, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.2s ease;
     cursor: pointer;
-    display: flex;
-    flex-direction: column;
 }
 
 .apartment-card:hover {
@@ -87,11 +84,22 @@ h2 {
 /* Buttons group container for consistent layout */
 .btn-group {
     display: flex;
-    gap: 10px;
-    margin-top: 12px;
+    gap: 12px;
+    margin-top: 16px;
+}
+.btn-group button,
+.btn-group form {
+    flex: 1;
+    margin: 0;
 }
 
+.btn-group form {
+    display: flex;
+}
 
+.btn-group form button {
+    flex: 1;
+}
 /* Buttons */
 .btn {
     padding: 10px 16px;
@@ -101,34 +109,50 @@ h2 {
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-            background-color: rgb(65, 128, 65);
+    background-color: rgb(65, 128, 65);
     color: white;
     transition: background-color 0.3s ease;
 }
-.btn:hover {
-    background-color: rgb(98, 208, 98);
-}
-/* Add button */
+
 .btn.add {
-    background-color: #4b6cb7;
+    background-color: #768ba0;
+    color: white;
+    margin-bottom: 20px;
 }
 
 .btn.add:hover {
     background-color: #3a53a1;
 }
 
-/* Edit button */
 .btn.edit {
-    background-color: #1c3e83;
+    background-color: #768ba0;
     box-shadow: 0 4px 8px rgba(24, 62, 131, 0.5);
 }
 
 .btn.edit:hover {
-    background-color: #1d70a8;
+    background-color:rgb(154, 181, 209);
 }
 
+.btn.delete {
+    background-color:rgb(92, 32, 38);
+            box-shadow: 0 4px 8px rgb(136, 42, 42);
 
+    color: white;
+}
 
+.btn.delete:hover {
+    background-color: #b02a37;
+
+}
+/* Lease button */
+.btn.lease-btn{
+    background-color: #278b3f;
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.5);
+}
+
+.btn.lease:hover {
+    background-color: #218838;
+}
 /* Modal Styles */
 .modal {
     display: none;
@@ -167,13 +191,55 @@ h2 {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   font-family: 'Poppins', sans-serif;
 }
+/* Modal & Notification styles */
+.modal, .notif {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+}
 
+.close {
+    cursor: pointer;
+    font-size: 24px;
+    color:rgb(107, 43, 49);
+    font-weight: bold;
+}
+
+.notif-content {
+    text-align: center;
+    font-weight: 600;
+    padding: 20px;
+}
+
+.notif.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.notif.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+.modal-content, .notif-content {
+    background: #ffffff;
+    padding: 30px;
+    margin: 8% auto;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 16px;
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.15),
+        0 4px 8px rgba(0, 0, 0, 0.08);
+}
 /* Modal header styling */
 .modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .modal-header h3 {
@@ -200,12 +266,14 @@ h2 {
   margin-bottom: 20px;
 }
 
+.form-group {
+    margin-bottom: 20px;
+}
+
 .form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #444;
-  font-size: 1rem;
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
 .form-group input[type="text"],
@@ -378,4 +446,18 @@ input[type="file"] {
 input[type="file"]:focus {
   border-color: #4b6cb7;
   outline: none;
+}
+@media (max-width: 768px) {
+    .modal-content, .notif-content {
+        width: 95%;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .btn-group button,
+    .btn-group form {
+        width: 100%;
+    }
 }
