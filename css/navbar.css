@@ -2,7 +2,7 @@
 
 /* ---------- Navbar Styling ---------- */
 .navbar {
-    background: linear-gradient(90deg, #4b6cb7, #182848); /* subtle gradient blue */
+    background: linear-gradient( #324558, #324558); /* subtle gradient blue */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -13,7 +13,6 @@
     top: 0;
     z-index: 100;
 }
-
 .navbar .logo a {
     color: #fff;
     font-size: 32px;
@@ -60,7 +59,11 @@
 
 /* ACTIVE LINK STYLE */
 .navbar .nav-links a.active {
-    background-color: #4b6cb7; /* primary blue */
+    background-color: #768ba0; /* primary blue */
     color: #fffffe;
     box-shadow: 0 6px 14px rgba(75, 108, 183, 0.6);
+}
+a {
+    text-decoration: none;
+    color: inherit;
 }

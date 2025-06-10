@@ -191,3 +191,8 @@ body {
 .modal-content button[type="submit"]:hover {
     background-color: #3a53a1;
 }
+th, td {
+    text-align: left;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e5e9f2;
+    color: #2c3e50;}

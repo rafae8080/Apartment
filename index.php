@@ -95,112 +95,18 @@ $stmt = sqlsrv_query($conn, $sql);
     <title>Apartment Dashboard</title>
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/dashboard.css" />
-    <style>
-        .add-card {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px dashed #aaa;
-            border-radius: 8px;
-            padding: 40px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #555;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: #fff;
-            padding: 20px;
-            width: 350px;
-            border-radius: 8px;
-        }
-        .modal input, .modal textarea {
-            width: 100%;
-            margin-bottom: 12px;
-            padding: 8px;
-        }
-        .modal input[type="submit"], button {
-            background-color: #2C3E50;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 4px;
-            margin-right: 5px;
-                        width: 100%;
-
-        }
-        .modal input[type="submit"]:hover, button:hover {
-            background-color: #2C3E50;
-        }
-        .apartment-card {
-            position: relative;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .apartment-card button {
-            position: relative;
-            top: 5px;
-            margin-top: 8px;
-        }
-        .apartment-card form {
-            display: inline-block;
-        }
-        .user-section {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            border: 1px solid black;
-            padding: 10px;
-            background: #fff;
-            border-radius: 8px;
-        }
-        .user-section .user-email, .user-name {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            word-wrap: break-word;
-        }
-        .logout-btn {
-            background-color: #2C3E50;
-            border: none;
-            padding: 8px 12px;
-            color: white;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: 600;
-            width: 100%;
-        }
-        .logout-btn:hover {
-            background-color: #1a2531;
-        }
-        a {
-    text-decoration: none;
-    color: inherit;
-}
-
-    
-    </style>
+    <style></style>
 </head>
 
 <body>
     <nav class="navbar">
         <div class="logo"><a href="index.php">RM</a></div>
         <div class="nav-links">
-            <a href="#apartments">Apartments</a>
+            <a href="index.php">Apartments</a>
             <a href="lease.php">Lease</a>
             <a href="transaction.php">Transactions</a>
+            <a href="logout.php">Logout</a>
+
         </div>
     </nav>
 
@@ -208,27 +114,28 @@ $stmt = sqlsrv_query($conn, $sql);
         <h2 class="section-title">Available Apartments</h2>
 
         <div class="apartment-grid">
-            <?php while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) { ?>
-                <div class="apartment-card">
-                    <a href="<?= htmlspecialchars($row['page_link']) ?>">
-                        <img src="<?= htmlspecialchars($row['image_path'] ?? 'images/apartment sample.jpg') ?>" alt="Apartment Image" style="width:100%; height:auto; border-radius: 8px;" />
-                        <div class="apartment-details">
-                            <h3><?= htmlspecialchars($row['name']) ?></h3>
-                            <p><?= htmlspecialchars($row['address']) ?></p>
-                        </div>
-                    </a>
-                    
-                    <?php if($_SESSION['userRole'] === 'admin') : ?>
-                    <!-- Edit and Delete buttons -->
-                    <button onclick="openEditModal(<?= $row['id'] ?>, '<?= addslashes($row['name']) ?>', '<?= addslashes($row['address']) ?>')">Edit</button>
-                    <form method="POST" style="display:inline" onsubmit="return confirm('Are you sure you want to delete this apartment?');">
-                        <input type="hidden" name="delete_id" value="<?= $row['id'] ?>" />
-                        <button type="submit">Delete</button>
-                    </form>
-                    <?php endif; ?>
+ <?php while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) : ?>
+    <div class="apartment-card">
+        <a href="<?= htmlspecialchars($row['page_link']) ?>">
+            <img src="<?= htmlspecialchars($row['image_path'] ?? 'images/apartment sample.jpg') ?>" alt="Apartment Image" />
+            <div class="apartment-details">
+                <h3><?= htmlspecialchars($row['name']) ?></h3>
+                <p><?= htmlspecialchars($row['address']) ?></p>
+        </a>
+                <?php if($_SESSION['userRole'] === 'admin') : ?>
+                <div class="btn-group">
+                    <button type="button" class="edit-btn" onclick="openEditModal(<?= $row['id'] ?>, '<?= addslashes($row['name']) ?>', '<?= addslashes($row['address']) ?>')">Edit</button>
 
+                    <form method="POST" onsubmit="return confirm('Are you sure you want to delete this apartment?');">
+                        <input type="hidden" name="delete_id" value="<?= $row['id'] ?>" />
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
                 </div>
-            <?php } ?>
+                <?php endif; ?>
+            </div>
+
+    </div>
+<?php endwhile; ?>
  
             <?php if($_SESSION['userRole'] === 'admin') : ?>
             <!-- Add Apartment Button -->
@@ -269,17 +176,8 @@ $stmt = sqlsrv_query($conn, $sql);
     </div>
     <?php endif; ?>
 
-    <!-- FOR LOGOUT -->
-    <div class="user-section">
-        <span class="user-name"><?= htmlspecialchars($_SESSION['userName']); ?></span>
-        <span class="user-role"><?= htmlspecialchars($_SESSION['userRole']); ?></span>
-        <span class="user-email"><?= htmlspecialchars($_SESSION['userEmail']); ?></span>
-        <form action="logout.php" method="post">
-            <button type="submit" class="logout-btn">Logout</button>
-        </form>
-    </div>
-
     <script>
+        
         function openEditModal(id, name, address) {
             document.getElementById('edit_id').value = id;
             document.getElementById('edit_name').value = name;
@@ -298,6 +196,7 @@ $stmt = sqlsrv_query($conn, $sql);
                 editModal.style.display = "none";
             }
         }
+        
     </script>
 </body>
 </html>

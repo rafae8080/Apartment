@@ -8,8 +8,11 @@ $connectionOptions = [
     "PWD" => ""
 ];
 $conn = sqlsrv_connect($serverName, $connectionOptions);
-if ($conn === false) {
-    die("Connection failed: " . print_r(sqlsrv_errors(), true));
+if ($conn === false) die(print_r(sqlsrv_errors(), true));
+require_once 'session_init.php';
+if (!isset($_SESSION['userEmail'])) {
+    header("Location: login.php");
+    exit();
 }
 
 // Get filter from URL
@@ -84,6 +87,8 @@ if ($leaseStmt === false) {
 <link rel="stylesheet" href="css/lease.css" />
 <link rel="stylesheet" href="css/navbar.css" />
 <link rel="stylesheet" href="css/leases.css" />
+<link rel="stylesheet" href="css/transaction.css" />
+
 </head>
 <body>
 
@@ -96,6 +101,7 @@ if ($leaseStmt === false) {
         <a href="logout.php">Logout</a>
     </div>
 </nav>
+    <div class="container">
 
 <h1>Lease Overview</h1>
 
@@ -226,6 +232,7 @@ window.onclick = function(event) {
 
 <?php
 // Handle terminate operation
+
 if (isset($_GET['terminate']) && $_GET['terminate'] == '1') {
     $apt = $_GET['apt'] ?? '';
     $unit = $_GET['unit'] ?? '';
@@ -244,6 +251,7 @@ if (isset($_GET['terminate']) && $_GET['terminate'] == '1') {
             echo "<script>alert('Contract terminated successfully.'); window.location.href=window.location.pathname;</script>";
         }
     }
+    
 }
 ?>
 
@@ -268,6 +276,7 @@ if (isset($_GET['delete']) && $_GET['delete'] == '1') {
         }
     }
 }
+
 ?>
 </body>
 </html>

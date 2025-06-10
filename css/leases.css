@@ -2,6 +2,7 @@
   body {
     font-family: 'Poppins', sans-serif;
     background: #f8f9fa;
+    
   }
   h1 {
     text-align: center;
@@ -29,14 +30,15 @@
     box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     overflow: hidden;
   }
-  th, td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
+th, td {
     text-align: left;
-    font-size: 15px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e5e9f2;
+    color: #2c3e50;
+    
   }
   th {
-    background-color: #273c75;
+    background-color: #324558;
     color: #f9fbff;
     font-weight: 700;
   }
@@ -44,7 +46,7 @@
     background-color: #f1f4fb;
   }
   .action-btn {
-    background-color: #4b6cb7;
+    background-color: #768ba0;
     border: none;
     padding: 8px 15px;
     color: white;

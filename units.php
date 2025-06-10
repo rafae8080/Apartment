@@ -53,78 +53,202 @@ $unitsStmt = sqlsrv_query($conn, $unitsSql, [$apartmentId]);
     <link rel="stylesheet" href="css/units.css">
     <link rel="stylesheet" href="css/navbar.css">
     <style>
-        /* Modal and notification base styles */
-        .modal, .notif {
-            display: none; 
-            position: fixed; 
-            z-index: 999; 
-            left: 0; top: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.5);
-        }
-        .modal-content, .notif-content {
-            background: #fff; 
-            padding: 20px; 
-            margin: 10% auto; 
-            width: 90%; max-width: 500px; 
-            border-radius: 8px;
-        }
-        .notif-content { text-align: center; }
-        .notif.success { background: rgba(0, 255, 0, 0.2); }
-        .notif.error { background: rgba(255, 0, 0, 0.2); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; }
-        .close { cursor: pointer; font-size: 24px; }
+ /* Base styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f4ff;
+    font-family: 'Poppins', sans-serif;
+    color: #2c3e50;
+    box-sizing: border-box;
+}
 
-        /* Button styles */
-        .btn { 
-            padding: 10px 15px; 
-            margin-top: 10px; 
-            border: none; 
-            background: #2C3E50; 
-            color: #fff; 
-            cursor: pointer; 
-            border-radius: 4px; 
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        .btn.edit { background: #007bff; }
-        .btn.delete { background: #dc3545; }
-        .btn.add { background: #17a2b8; margin-bottom: 20px; }
+/* Modal & Notification styles */
+.modal, .notif {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+}
 
-        .apartment-card { cursor: pointer; }
+.modal-content, .notif-content {
+    background: #ffffff;
+    padding: 30px;
+    margin: 8% auto;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 16px;
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.15),
+        0 4px 8px rgba(0, 0, 0, 0.08);
+}
 
-        /* Simple layout */
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-weight: bold; }
-        .form-group input, .form-group textarea { width: 100%; padding: 8px; }
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-        /* Unit Image */
-        .apartment-card img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
+.close {
+    cursor: pointer;
+    font-size: 24px;
+    color:rgb(107, 43, 49);
+    font-weight: bold;
+}
 
-        /* Button Group Flexbox */
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: auto;
-        }
-        .btn-group button,
-        .btn-group form {
-            flex: 1;
-            margin: 0;
-        }
-        .btn-group form {
-            display: flex;
-        }
-        .btn-group form button {
-            flex: 1;
-            margin: 0;
-        }
+.notif-content {
+    text-align: center;
+    font-weight: 600;
+    padding: 20px;
+}
+
+.notif.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.notif.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Card for Units */
+.apartment-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.apartment-card:hover {
+    transform: translateY(-4px);
+}
+
+.apartment-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+/* Button styling */
+.btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn.add {
+    background-color: #768ba0;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.btn.add:hover {
+    background-color: #3a53a1;
+}
+
+.btn.edit {
+    background-color: #768ba0;
+    color: white;
+}
+
+.btn.edit:hover {
+    background-color:rgb(154, 181, 209);
+}
+
+.btn.delete {
+    background-color:rgb(92, 32, 38);
+    color: white;
+}
+
+.btn.delete:hover {
+    background-color: #b02a37;
+}
+/* Lease button */
+.btn.lease{
+    background-color: #278b3f;
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.5);
+}
+
+.btn.lease:hover {
+    background-color: #218838;
+}
+
+/* Button group */
+.btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.btn-group button,
+.btn-group form {
+    flex: 1;
+    margin: 0;
+}
+
+.btn-group form {
+    display: flex;
+}
+
+.btn-group form button {
+    flex: 1;
+}
+
+/* Form inputs */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.8px solid #d6d9e6;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #4b6cb7;
+    outline: none;
+    box-shadow: 0 0 6px rgba(75, 108, 183, 0.5);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .modal-content, .notif-content {
+        width: 95%;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .btn-group button,
+    .btn-group form {
+        width: 100%;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -143,6 +267,7 @@ $unitsStmt = sqlsrv_query($conn, $unitsSql, [$apartmentId]);
     
     <?php if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'admin') : ?>
     <button class="btn add" onclick="openAddModal()">Add Unit</button>
+    
     <?php endif; ?>
     <div class="apartment-grid">
         <?php while ($unit = sqlsrv_fetch_array($unitsStmt, SQLSRV_FETCH_ASSOC)) : 
@@ -247,7 +372,7 @@ $unitsStmt = sqlsrv_query($conn, $unitsSql, [$apartmentId]);
             </div>
             <p id="leaseModalDescription"></p>
             <p id="leaseModalRate"></p>
-            <button class="btn" onclick="goToAddTenant()">Proceed to Lease Form</button>
+            <button class="btn lease-btn" onclick="goToAddTenant()">Proceed to Lease Form</button>
         </div>
     </div>
 

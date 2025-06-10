@@ -98,6 +98,7 @@ h2 {
     padding: 14px 25px;
     font-weight: 700;
     font-size: 1.1rem;
+    background-color: rgb(65, 128, 65);
     cursor: pointer;
     transition: background-color 0.3s ease;
     border: none;
@@ -106,7 +107,9 @@ h2 {
     flex: 1; /* equal width */
     text-align: center;
 }
-
+.btn:hover {
+    background-color: rgb(98, 208, 98);
+}
 /* Add button */
 .btn.add {
     background-color: #4b6cb7;
@@ -126,15 +129,7 @@ h2 {
     background-color: #1d70a8;
 }
 
-/* Delete button */
-.btn.delete {
-    background-color: #dc3545;
-    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.5);
-}
 
-.btn.delete:hover {
-    background-color: #b32b27;
-}
 
 /* Lease button */
 .btn.lease {

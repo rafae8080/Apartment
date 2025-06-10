@@ -1,9 +1,19 @@
+/* Shared Styles from Login Page */
 body {
-    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9fbff;
+    font-family: 'Montserrat', sans-serif;
+    background-attachment: fixed;
     color: #2c3e50;
     margin: 0;
     padding: 0;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0.6;
+    z-index: -1;
 }
 
 .container {
@@ -16,7 +26,7 @@ body {
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 30px;
-    color: #182848;
+    color: #000000;
     text-align: left;
     letter-spacing: 0.5px;
 }
@@ -31,10 +41,8 @@ body {
 /* Apartment Card */
 .apartment-card {
     background-color: #fff;
-    border-radius: 16px;
-    box-shadow:
-        0 8px 16px rgba(24, 40, 72, 0.12),
-        0 4px 8px rgba(24, 40, 72, 0.06);
+    border-radius: 20px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
@@ -44,17 +52,12 @@ body {
 
 .apartment-card:hover {
     transform: translateY(-10px);
-    box-shadow:
-        0 16px 32px rgba(24, 40, 72, 0.2),
-        0 8px 16px rgba(24, 40, 72, 0.12);
 }
 
 .apartment-card img {
     width: 100%;
     height: 220px;
     object-fit: cover;
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
     transition: transform 0.5s ease;
 }
 
@@ -84,52 +87,29 @@ body {
     line-height: 1.5;
 }
 
-/* Buttons container */
-.btn-group {
-    display: flex;
-    gap: 8px;
-    margin-top: auto;
-}
-
-/* Edit button */
-.btn-group .edit-btn {
-    background-color: #1c3e83; /* Gold */
-    box-shadow: 0 4px 8px rgba(241, 196, 15, 0.4);
+/* Buttons */
+button, .edit-btn, .delete-btn, .logout-btn, .modal input[type="submit"] {
+    border-radius: 20px;
+    border: 1px solid #324558;
+    background-color: #768ba0;
     color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in, background-color 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 14px;
-    font-family: 'Poppins', sans-serif;
-}
-.btn-group .edit-btn:hover {
-    background-color: #326485;
+    box-shadow: 0 6px 14px rgba(39, 60, 117, 0.5);
 }
 
-/* Delete button */
-.btn-group .delete-btn {
-    background-color: #2f3640; /* Slate Gray */
-    box-shadow: 0 4px 8px rgba(47, 54, 64, 0.5);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 14px;
-    font-family: 'Poppins', sans-serif;
-}
-.btn-group .delete-btn:hover {
-    background-color: #353b48;
+button:hover, .edit-btn:hover, .delete-btn:hover, .logout-btn:hover, .modal input[type="submit"]:hover {
+    background-color: #5c738d;
 }
 
-/* Remove default form margin */
-.btn-group form {
-    margin: 0;
+button:active, .edit-btn:active, .delete-btn:active, .logout-btn:active, .modal input[type="submit"]:active {
+    transform: scale(0.95);
 }
 
 /* Add Card */
@@ -138,7 +118,7 @@ body {
     justify-content: center;
     align-items: center;
     border: 3px dashed #4b6cb7;
-    border-radius: 12px;
+    border-radius: 20px;
     padding: 40px;
     font-weight: 700;
     color: #4b6cb7;
@@ -152,10 +132,10 @@ body {
 .add-card:hover {
     background-color: #e8f0fe;
     border-color: #3a53a1;
-    color: #3a53a1;
+    color: #768ba0;
 }
 
-/* Modal Styles */
+/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -173,9 +153,9 @@ body {
     background: #fff;
     padding: 30px 35px;
     width: 380px;
-    border-radius: 16px;
+    border-radius: 20px;
     box-shadow: 0 20px 40px rgba(24, 40, 72, 0.2);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .modal-content h3 {
@@ -185,42 +165,28 @@ body {
     color: #182848;
     margin-bottom: 25px;
 }
+.modal input[type="submit"] {
+    width: 100%; /* Or set a specific value like 240px */
+    padding: 14px 20px; /* Optional: Adjust padding to match new width */
+}
 
 .modal input[type="text"],
 .modal textarea,
 .modal input[type="file"] {
-    width: 100%;
+    width: 95%;
     padding: 14px 16px;
     margin-bottom: 20px;
-    border: 1.8px solid #d6d9e6;
-    border-radius: 12px;
+    background-color: #eee;
+    border: none;
+    border-radius: 20px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .modal input[type="text"]:focus,
 .modal textarea:focus {
-    border-color: #4b6cb7;
     outline: none;
-}
-
-.modal input[type="submit"],
-button {
-    background-color: #4b6cb7;
-    color: white;
-    border: none;
-    padding: 14px 25px;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.modal input[type="submit"]:hover,
-button:hover {
-    background-color: #3a53a1;
+    box-shadow: 0 0 0 2px #4b6cb7;
 }
 
 /* User Section */
@@ -229,14 +195,14 @@ button:hover {
     bottom: 30px;
     right: 30px;
     background: #fff;
-    border-radius: 16px;
+    border-radius: 20px;
     box-shadow: 0 10px 30px rgba(24, 40, 72, 0.15);
     padding: 20px 30px;
     min-width: 220px;
     text-align: right;
     font-weight: 600;
     color: #182848;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .user-section span {
@@ -246,22 +212,35 @@ button:hover {
     word-wrap: break-word;
 }
 
-/* Logout button */
-.logout-btn {
-    background-color: #273c75; /* dark steel blue */
-    border: none;
-    padding: 12px 25px;
-    color: white;
-    border-radius: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%;
-    margin-top: 12px;
-    font-family: 'Poppins', sans-serif;
-    box-shadow: 0 6px 14px rgba(39, 60, 117, 0.5);
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
-.logout-btn:hover {
-    background-color: #40739e; /* lighter steel blue */
+.btn-group {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
 }
+
+.btn-group form {
+    margin: 0;
+}
+/* Edit Button */
+.edit-btn {
+    background-color: #768ba0; /* Change to your desired color */
+}
+
+.edit-btn:hover {
+    background-color: #3a53a1; /* Hover color */
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: rgb(92, 32, 38);
+}
+
+.delete-btn:hover {
+    background-color:#b02a37;
+}
+

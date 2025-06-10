@@ -72,12 +72,12 @@ $unit = isset($_GET['unit']) ? htmlspecialchars($_GET['unit']) : '';
         }
 
         .create-btn {
-            background-color: #007BFF;
+            background-color: #768ba0;
             color: #fff;
         }
 
         .create-btn:hover {
-            background-color: #0056b3;
+            background-color: #324558;
         }
 
         .close-btn {
@@ -88,33 +88,28 @@ $unit = isset($_GET['unit']) ? htmlspecialchars($_GET['unit']) : '';
         .close-btn:hover {
             background-color: #c2c2c2;
         }
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  min-height: 100vh;
+  background-image: url('uploads/background.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
 
-        .navbar {
-            background-color: #1f2937;
-            color: #fff;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar .logo a {
-            color: #fff;
-            font-size: 20px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .navbar .nav-links a {
-            color: #d1d5db;
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: 500;
-        }
-
-        .navbar .nav-links a:hover {
-            color: #ffffff;
-        }
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black; /* or any overlay color */
+  opacity: 0.6; /* simulate background opacity */
+  z-index: -1;
+}
     </style>
 </head>
 <body>
@@ -125,7 +120,9 @@ $unit = isset($_GET['unit']) ? htmlspecialchars($_GET['unit']) : '';
         <div class="nav-links">
             <a href="index.php">Apartments</a>
             <a href="lease.php">Lease</a>
-            <a href="#transactions">Transactions</a>
+            <a href="transactions.php">Transactions</a>
+                        <a href="logout.php">Logout</a>
+
         </div>
     </nav>
 

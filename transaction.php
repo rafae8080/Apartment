@@ -8,8 +8,11 @@ $connectionOptions = [
     "PWD" => ""
 ];
 $conn = sqlsrv_connect($serverName, $connectionOptions);
-if ($conn === false) {
-    die("Connection failed: " . print_r(sqlsrv_errors(), true));
+if ($conn === false) die(print_r(sqlsrv_errors(), true));
+require_once 'session_init.php';
+if (!isset($_SESSION['userEmail'])) {
+    header("Location: login.php");
+    exit();
 }
 
 // Filter values
