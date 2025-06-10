@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+/* ---------- Navbar Styling ---------- */
+.navbar {
+    background: linear-gradient( #324558, #324558); /* subtle gradient blue */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 4px 10px rgba(24, 40, 72, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.navbar .logo a {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 900;
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.6),
+        0 0 10px #000000;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.navbar .logo a:hover {
+    color: #5c5858;
+    text-shadow:
+        3px 3px 6px rgba(0, 0, 0, 0.7),
+        0 0 18px #000000;
+    cursor: pointer;
+}
+
+.navbar .nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.navbar .nav-links a {
+    color: #e0e6f8;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover and focus styles */
+.navbar .nav-links a:hover,
+.navbar .nav-links a:focus {
+    background-color: #fffffe;
+    color: #182848;
+    outline: none;
+}
+
+/* ACTIVE LINK STYLE */
+.navbar .nav-links a.active {
+    background-color: #768ba0; /* primary blue */
+    color: #fffffe;
+    box-shadow: 0 6px 14px rgba(75, 108, 183, 0.6);
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}

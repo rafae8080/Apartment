@@ -1,0 +1,246 @@
+/* Shared Styles from Login Page */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-attachment: fixed;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0.6;
+    z-index: -1;
+}
+
+.container {
+    max-width: 1300px;
+    margin: 50px auto;
+    padding: 0 25px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #000000;
+    text-align: left;
+    letter-spacing: 0.5px;
+}
+
+/* Apartment Grid */
+.apartment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Apartment Card */
+.apartment-card {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.apartment-card:hover {
+    transform: translateY(-10px);
+}
+
+.apartment-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.apartment-card:hover img {
+    transform: scale(1.05);
+}
+
+.apartment-details {
+    padding: 24px 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.apartment-details h3 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.apartment-details p {
+    margin: 0 0 15px 0;
+    font-size: 15px;
+    color: #5a6d85;
+    line-height: 1.5;
+}
+
+/* Buttons */
+button, .edit-btn, .delete-btn, .logout-btn, .modal input[type="submit"] {
+    border-radius: 20px;
+    border: 1px solid #324558;
+    background-color: #768ba0;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in, background-color 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(39, 60, 117, 0.5);
+}
+
+button:hover, .edit-btn:hover, .delete-btn:hover, .logout-btn:hover, .modal input[type="submit"]:hover {
+    background-color: #5c738d;
+}
+
+button:active, .edit-btn:active, .delete-btn:active, .logout-btn:active, .modal input[type="submit"]:active {
+    transform: scale(0.95);
+}
+
+/* Add Card */
+.add-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px dashed #4b6cb7;
+    border-radius: 20px;
+    padding: 40px;
+    font-weight: 700;
+    color: #4b6cb7;
+    font-size: 1.4rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+    text-align: center;
+}
+
+.add-card:hover {
+    background-color: #e8f0fe;
+    border-color: #3a53a1;
+    color: #768ba0;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1100;
+    left: 0; top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(24, 40, 72, 0.7);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px 35px;
+    width: 380px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(24, 40, 72, 0.2);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #182848;
+    margin-bottom: 25px;
+}
+.modal input[type="submit"] {
+    width: 100%; /* Or set a specific value like 240px */
+    padding: 14px 20px; /* Optional: Adjust padding to match new width */
+}
+
+.modal input[type="text"],
+.modal textarea,
+.modal input[type="file"] {
+    width: 95%;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    background-color: #eee;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.modal input[type="text"]:focus,
+.modal textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #4b6cb7;
+}
+
+/* User Section */
+.user-section {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(24, 40, 72, 0.15);
+    padding: 20px 30px;
+    min-width: 220px;
+    text-align: right;
+    font-weight: 600;
+    color: #182848;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.user-section span {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.btn-group form {
+    margin: 0;
+}
+/* Edit Button */
+.edit-btn {
+    background-color: #768ba0; /* Change to your desired color */
+}
+
+.edit-btn:hover {
+    background-color: #3a53a1; /* Hover color */
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: rgb(92, 32, 38);
+}
+
+.delete-btn:hover {
+    background-color:#b02a37;
+}
+
